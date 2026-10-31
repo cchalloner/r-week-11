@@ -1,0 +1,163 @@
+---
+title: "Project 11: Basic Linear Regression in R"
+output:
+  html_document:
+    self_contained: true
+    toc: true
+    toc_depth: 2
+---
+
+# Overview
+
+Use two datasets to explore relationships, fit basic linear regression models, and explain the results. First, model teaching score using age. Then, model life expectancy using continent for countries observed in 2007. Each model uses just one explanatory variable.
+
+This file contains all project tasks and questions; no separate Word document is needed. Follow Blackboard for repository access and review the grading rubric before beginning.
+
+Complete every TODO. Write explanations in the Markdown response areas outside the code chunks. Support your answers with your own output, include units, and add brief code comments where they help explain your decisions. Use DataCamp Chapters 1–3 and the assigned ModernDive reading as references. DataCamp Chapter 4 on logistic regression is not required.
+
+# Setup
+
+Install any missing packages once in the RStudio Console: `tidyverse`, `moderndive`, `gapminder`, `broom`, `rmarkdown`, and `knitr`. Keep installation commands out of this report.
+
+The setup below is provided so everyone starts with the same data. `evals_ch5` is created from `moderndive::evals`; it is not a separate packaged dataset. The Gapminder data are restricted to 2007 so each row represents one country in the same year.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 7, fig.height = 4.5)
+library(tidyverse)
+library(moderndive)
+library(gapminder)
+library(broom)
+
+evals_ch5 <- moderndive::evals |>
+  select(ID, score, age)
+
+gap_2007 <- gapminder::gapminder |>
+  filter(year == 2007)
+```
+
+## Working in this file
+
+- Complete the sections in order. Run the setup chunk before running your analysis chunks interactively.
+- Write R code inside the supplied code chunks and explanations in the response areas below them. You may add chunks if needed.
+- Use `lm()` to fit both models. Each uses one predictor; a categorical predictor can have more than two groups.
+- Display your results explicitly. If you save a summary or plot in an object, also display that object so it appears in the knitted report.
+- For R help, use `?lm`, `?predict.lm`, `?broom::augment.lm`, or `?moderndive::get_regression_table` in the Console. The `get_regression_table()` function comes from `moderndive` and `augment()` comes from `broom`.
+
+# Applications of regression
+
+Describe two applications of regression: explaining relationships and predicting outcomes. Use the teaching-score or life-expectancy analysis to illustrate each application.
+
+TODO: Write your response here. You may return to this prompt after completing the analyses.
+
+# Part 1: Teaching score and age
+
+The teaching-evaluation data contain course records. `score` is an average teaching evaluation on a 1–5 scale, and `age` is the instructor's age in years. An instructor can appear in more than one course record. Treat this as a descriptive exercise; it does not establish that age causes differences in evaluations.
+
+## Explore the relationship
+
+- Display the first 10 rows of `evals_ch5`.
+- Calculate the mean, median, and standard deviation of both `score` and `age`.
+- Create a labeled scatterplot of score versus age, with age on the horizontal axis. Add a fitted linear regression line.
+
+```{r teaching-eda}
+# TODO: Inspect the data, compute summaries, and create your plot.
+
+```
+
+**Response:** Describe the direction of the relationship and how closely the points follow a straight line. Cite a feature of your plot that supports your description.
+
+TODO: Write your response here.
+
+## Fit and interpret the model
+
+Fit a linear regression model predicting `score` from `age`. Save it as `score_model`. Display the coefficient table with `get_regression_table()` and the model summary with `summary()`.
+
+```{r teaching-model}
+# TODO: Fit score_model and display its coefficient table and summary.
+
+```
+
+**Response:**
+
+- Interpret the age coefficient in teaching-score points per additional year of age. Does it agree with your exploration?
+- Explain what the intercept represents. Is age zero a useful context for interpreting this model?
+- Report R-squared and explain it as the proportion of variation in teaching scores explained by this fitted model. Does this value alone establish accurate predictions for new observations? Explain briefly.
+
+TODO: Write your responses here.
+
+## Predict and interpret a residual
+
+Use `predict()` with its `newdata` argument and a new data frame containing a column named `age` to predict the teaching score for an instructor aged 40. Use `augment()` to create `score_output`, containing fitted values and residuals, and display its first 10 rows.
+
+```{r teaching-prediction-residuals}
+# TODO: Predict the score at age 40.
+# TODO: Create score_output and display its first 10 rows.
+
+```
+
+In the augmented output, `.fitted` contains the model's fitted scores and `.resid` contains the residuals. Use these column names when selecting or sorting model results.
+
+**Response:** Report the prediction in context. For one row in `score_output`, report the age, observed score, fitted score, and residual. Explain the residual's sign and size in teaching-score points. Residual = observed value minus fitted value.
+
+TODO: Write your response here.
+
+# Part 2: Life expectancy and continent
+
+Use only `gap_2007` throughout this part. `lifeExp` is life expectancy in years. The model will use continent as a categorical explanatory variable, giving each continent its own predicted mean life expectancy.
+
+## Explore the continent groups
+
+Calculate the number of countries, mean life expectancy, and median life expectancy for each continent. Create a labeled boxplot of life expectancy by continent.
+
+```{r continent-eda}
+# TODO: Summarize life expectancy by continent and create your boxplot.
+
+```
+
+**Response:** Describe two differences between the continent distributions, supported by your summaries or plot. Within a continent, what might a difference between its mean and median suggest about the distribution? Do not infer causes from these summaries.
+
+TODO: Write your response here.
+
+## Fit the categorical model
+
+Fit a linear regression model predicting `lifeExp` from `continent`, using `gap_2007`. Save it as `lifeExp_model` and display its coefficient table with `get_regression_table()`.
+
+Create `lifeExp_output` with fitted values and residuals. Use `broom::augment()` with `data = gap_2007` so the output retains country names. Display the first 10 rows.
+
+```{r continent-model}
+# TODO: Fit lifeExp_model and display its coefficient table.
+# TODO: Create lifeExp_output, keeping the original country information.
+# TODO: Display the first 10 rows.
+
+```
+
+The reference continent is the group represented by the intercept; the other continent coefficients describe differences from that group. Check the factor levels or coefficient labels to identify it. You do not need to change the reference group.
+
+**Response:** Identify the reference continent and interpret one other continent's coefficient as a difference from that reference. Explain how the model's fitted values relate to the continent means you calculated earlier.
+
+TODO: Write your response here.
+
+## Identify and explain extreme residuals
+
+Use data-wrangling functions to display the five most negative residuals and the five most positive residuals. Each result must include country, continent, observed life expectancy, fitted life expectancy, and residual. Use the columns `country`, `continent`, `lifeExp` (observed), `.fitted` (fitted), and `.resid` (residual). Sort each result so its most extreme residual appears first: most negative first in one result and most positive first in the other. Keep the printed columns visible; you may use `knitr::kable()` to format the selected results as a table.
+
+```{r continent-extreme-residuals}
+# TODO: Display the five most negative residuals with the required columns.
+# TODO: Display the five most positive residuals with the required columns.
+
+```
+
+**Response:** Choose one country from each result. Explain how many years its observed life expectancy is below or above its continent's predicted mean. Explain one limitation of using continent alone to predict a country's life expectancy. A large residual does not automatically mean a record is incorrect.
+
+TODO: Write your response here.
+
+# Submission checklist
+
+- Replace every written TODO and complete every code task.
+- Keep your analysis code, results, plots, and written interpretations visible in the report. The supplied setup chunk is intentionally hidden in the HTML.
+- Review the rubric before submitting and use brief, helpful code comments.
+- Save this file as `Project11.Rmd` in your assignment repository.
+- Restart R, then use **Knit → Knit to HTML**. Knitting runs the report in a fresh session, so every object used must be created by code in this file; objects made only in the Console will not be available. Resolve errors and inspect the generated `Project11.html` in a browser.
+- Confirm that all requested results and explanations appear, and that plots and tables are readable.
+- Save, commit, and push **both `Project11.Rmd` and `Project11.html`** to your assignment repository. If you upload files through the repository website instead, upload both files and commit the changes.
+- Confirm that both files appear in the remote repository. Re-knit and update the HTML whenever you change the R Markdown file. Do not submit the HTML separately in Blackboard.
