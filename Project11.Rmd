@@ -11,9 +11,9 @@ output:
 
 Use two datasets to explore relationships, fit basic linear regression models, and explain the results. First, model teaching score using age. Then, model life expectancy using continent for countries observed in 2007. Each model uses just one explanatory variable.
 
-This file contains all project tasks and questions; no separate Word document is needed. Follow Blackboard for repository access and review the grading rubric before beginning.
+This file contains all project tasks and questions. Review the grading rubric before beginning.
 
-Complete every TODO. Write explanations in the Markdown response areas outside the code chunks. Support your answers with your own output, include units, and add brief code comments where they help explain your decisions. Use DataCamp Chapters 1–3 and the assigned ModernDive reading as references. DataCamp Chapter 4 on logistic regression is not required.
+Complete every TODO. Write explanations in the Markdown response areas outside the code chunks. Support your answers with your own output, include units, and add brief code comments where they help explain your decisions. Use DataCamp Chapters 1–3 and the assigned ModernDive reading as references.
 
 # Setup
 
